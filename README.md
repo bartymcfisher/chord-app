@@ -7,6 +7,7 @@ The app displays chord diagrams, lets you switch instruments, and includes a son
 ## Features
 
 - Ukulele and guitar chord libraries
+- Open chord section grouped by root note
 - Main chord diagram with selectable chord list
 - Song chord selection with checkboxes
 - Quick reference area for all selected song chords
@@ -76,7 +77,7 @@ src/
   App.tsx                    Main UI, language/theme settings, song selection
   App.css                    App layout and component styling
   components/
-    ChordDiagram.tsx         SVGuitar wrapper for chord diagrams
+    ChordDiagram.tsx         Theme-aware SVGuitar wrapper for chord diagrams
   data/
     chords.ts                Chord data for ukulele and guitar
 ```

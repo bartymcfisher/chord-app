@@ -163,8 +163,43 @@ select:focus-visible {
   font-weight: 700;
 }
 
+.chord-library {
+  display: grid;
+  gap: 18px;
+}
+
+.chord-category,
+.chord-root-group,
 .chord-buttons {
   display: grid;
+}
+
+.chord-category {
+  gap: 16px;
+}
+
+.chord-category h3 {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--surface-muted);
+  color: var(--text-strong);
+  font-size: 15px;
+  letter-spacing: 0;
+}
+
+.chord-root-group {
+  gap: 8px;
+}
+
+.chord-root-group h4 {
+  margin: 0;
+  color: var(--accent-strong);
+  font-size: 14px;
+  font-weight: 850;
+}
+
+.chord-buttons {
   gap: 10px;
 }
 
@@ -288,7 +323,7 @@ select:focus-visible {
   padding: 14px;
   border: 1px solid var(--border-soft);
   border-radius: 8px;
-  background: #ffffff;
+  background: var(--surface);
 }
 
 .reference-chord .chord-diagram {

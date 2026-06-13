@@ -5,9 +5,10 @@ import type { ChordShape } from '../data/chords'
 
 type ChordDiagramProps = {
   chord: ChordShape
+  theme: 'light' | 'dark'
 }
 
-export function ChordDiagram({ chord }: ChordDiagramProps) {
+export function ChordDiagram({ chord, theme }: ChordDiagramProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
@@ -18,6 +19,8 @@ export function ChordDiagram({ chord }: ChordDiagramProps) {
     containerRef.current.innerHTML = ''
 
     const chart = new SVGuitarChord(containerRef.current)
+    const chartColor = theme === 'dark' ? '#e5e7eb' : '#111827'
+    const fingerColor = theme === 'dark' ? '#14b8a6' : '#0f766e'
 
     chart
       .configure({
@@ -25,6 +28,14 @@ export function ChordDiagram({ chord }: ChordDiagramProps) {
         frets: 5,
         position: chord.baseFret ?? 1,
         tuning: chord.tuning,
+        color: chartColor,
+        titleColor: chartColor,
+        stringColor: chartColor,
+        fretColor: chartColor,
+        fretLabelColor: chartColor,
+        tuningsColor: chartColor,
+        fingerColor,
+        fingerTextColor: '#ffffff',
       })
       .chord({
         title: chord.name,
@@ -40,7 +51,7 @@ export function ChordDiagram({ chord }: ChordDiagramProps) {
         }),
       })
       .draw()
-  }, [chord])
+  }, [chord, theme])
 
   return <div className="chord-diagram" ref={containerRef} />
 }

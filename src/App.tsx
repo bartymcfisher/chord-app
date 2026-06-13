@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import './App.css'
 
 import { ChordDiagram } from './components/ChordDiagram'
-import { chords, type Instrument } from './data/chords'
+import { chords, type ChordShape, type Instrument } from './data/chords'
 
 type Language = 'en' | 'de'
 type Theme = 'light' | 'dark'
@@ -15,6 +15,8 @@ const instruments: { id: Instrument; label: string }[] = [
   { id: 'guitar', label: 'Guitar' },
 ]
 
+const rootOrder = ['A', 'Bb', 'B', 'C', 'D', 'E', 'F', 'G']
+
 const translations = {
   en: {
     appName: 'Chord App',
@@ -22,6 +24,7 @@ const translations = {
     instrumentLabel: 'Change instrument',
     chordListLabel: 'Chords',
     chordButtonsLabel: 'Show chords',
+    openChords: 'Open chords',
     guitar: 'Guitar',
     selected: 'Selected',
     inSong: 'in song',
@@ -42,6 +45,7 @@ const translations = {
     instrumentLabel: 'Instrument wechseln',
     chordListLabel: 'Akkorde',
     chordButtonsLabel: 'Akkorde anzeigen',
+    openChords: 'Offene Akkorde',
     guitar: 'Gitarre',
     selected: 'Auswahl',
     inSong: 'im Song',
@@ -58,6 +62,10 @@ const translations = {
     dark: 'Dunkel',
   },
 } satisfies Record<Language, Record<string, string>>
+
+function getChordRoot(chordName: string) {
+  return chordName.match(/^[A-G](?:#|b)?/)?.[0] ?? chordName
+}
 
 function readLanguageCookie(): Language {
   const language = document.cookie
@@ -86,6 +94,14 @@ function App() {
     () => chords.filter((chord) => chord.instrument === selectedInstrument),
     [selectedInstrument],
   )
+  const chordGroups = useMemo(() => {
+    return rootOrder
+      .map((root) => ({
+        root,
+        chords: visibleChords.filter((chord) => getChordRoot(chord.name) === root),
+      }))
+      .filter((group) => group.chords.length > 0)
+  }, [visibleChords])
   const [selectedChordId, setSelectedChordId] = useState(visibleChords[0].id)
   const text = translations[language]
 
@@ -178,27 +194,28 @@ function App() {
               {songChords.length} {text.inSong}
             </span>
           </div>
-          <div className="chord-buttons" aria-label={text.chordButtonsLabel}>
-            {visibleChords.map((chord) => (
-              <div
-                key={chord.id}
-                className={`chord-picker ${
-                  chord.id === selectedChord.id ? 'active' : ''
-                } ${songChordIds.includes(chord.id) ? 'marked' : ''}`}
-              >
-                <button type="button" onClick={() => setSelectedChordId(chord.id)}>
-                  {chord.name}
-                </button>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={songChordIds.includes(chord.id)}
-                    onChange={() => toggleSongChord(chord.id)}
-                  />
-                  {text.song}
-                </label>
-              </div>
-            ))}
+          <div className="chord-library" aria-label={text.chordButtonsLabel}>
+            <section className="chord-category">
+              <h3>{text.openChords}</h3>
+              {chordGroups.map((group) => (
+                <section className="chord-root-group" key={group.root}>
+                  <h4>{group.root}</h4>
+                  <div className="chord-buttons">
+                    {group.chords.map((chord) => (
+                      <ChordPicker
+                        chord={chord}
+                        isMarked={songChordIds.includes(chord.id)}
+                        isSelected={chord.id === selectedChord.id}
+                        songLabel={text.song}
+                        onSelect={setSelectedChordId}
+                        onToggleSongChord={toggleSongChord}
+                        key={chord.id}
+                      />
+                    ))}
+                  </div>
+                </section>
+              ))}
+            </section>
           </div>
         </aside>
 
@@ -207,7 +224,7 @@ function App() {
             <span>{text.selected}</span>
             <strong>{selectedChord.name}</strong>
           </div>
-          <ChordDiagram chord={selectedChord} />
+          <ChordDiagram chord={selectedChord} theme={theme} />
         </section>
       </section>
 
@@ -230,13 +247,51 @@ function App() {
           <div className="reference-row">
             {songChords.map((chord) => (
               <div className="reference-chord" key={chord.id}>
-                <ChordDiagram chord={chord} />
+                <ChordDiagram chord={chord} theme={theme} />
               </div>
             ))}
           </div>
         )}
       </section>
     </main>
+  )
+}
+
+type ChordPickerProps = {
+  chord: ChordShape
+  isMarked: boolean
+  isSelected: boolean
+  songLabel: string
+  onSelect: (chordId: string) => void
+  onToggleSongChord: (chordId: string) => void
+}
+
+function ChordPicker({
+  chord,
+  isMarked,
+  isSelected,
+  songLabel,
+  onSelect,
+  onToggleSongChord,
+}: ChordPickerProps) {
+  return (
+    <div
+      className={`chord-picker ${isSelected ? 'active' : ''} ${
+        isMarked ? 'marked' : ''
+      }`}
+    >
+      <button type="button" onClick={() => onSelect(chord.id)}>
+        {chord.name}
+      </button>
+      <label>
+        <input
+          type="checkbox"
+          checked={isMarked}
+          onChange={() => onToggleSongChord(chord.id)}
+        />
+        {songLabel}
+      </label>
+    </div>
   )
 }
 
