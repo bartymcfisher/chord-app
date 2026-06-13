@@ -2,7 +2,7 @@
   "name": "chord-app",
   "private": true,
   "version": "0.0.0",
-  "description": "Web-App zum Lernen und Üben von Akkorden für Ukulele und Gitarre.",
+  "description": "Web app for learning and practicing chords on ukulele and guitar.",
   "type": "module",
   "scripts": {
     "dev": "vite",

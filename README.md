@@ -1,91 +1,95 @@
 # Chord App
 
-Eine kleine Web-App zum Lernen und Üben von Akkorden für Ukulele und Gitarre.
+A small web app for learning and practicing chords on ukulele and guitar.
 
-Die App zeigt Akkorddiagramme an, lässt zwischen Instrumenten wechseln und bietet eine Song-Übungsfunktion: Akkorde können markiert werden und erscheinen anschließend als schnelle Referenz nebeneinander unter dem Hauptdiagramm.
+The app displays chord diagrams, lets you switch instruments, and includes a song practice workflow: select the chords needed for a song and keep them visible as a quick reference below the main diagram.
 
-## Funktionen
+## Features
 
-- Instrument-Umschalter für Ukulele und Gitarre
-- Akkordliste mit auswählbarem Hauptdiagramm
-- Song-Auswahl per Checkbox
-- Referenzbereich für alle Akkorde, die für einen Song benötigt werden
-- Responsive Layout für Desktop und kleinere Bildschirme
-- SVG-Akkorddiagramme mit `svguitar`
+- Ukulele and guitar chord libraries
+- Main chord diagram with selectable chord list
+- Song chord selection with checkboxes
+- Quick reference area for all selected song chords
+- Language selector for English and German
+- Theme selector for light and dark mode
+- Responsive layout for desktop and smaller screens
+- SVG chord diagrams powered by `svguitar`
 
-## Voraussetzungen
+## Requirements
 
 - Node.js
 - npm
 
-Empfohlen ist eine aktuelle Node.js-LTS-Version.
+A current Node.js LTS release is recommended.
 
 ## Installation
 
-Repository klonen:
+Clone the repository:
 
 ```powershell
-git clone <repository-url>
+git clone https://github.com/bartymcfisher/chord-app.git
 cd chord-app
 ```
 
-Abhängigkeiten installieren:
+Install dependencies:
 
 ```powershell
 npm install
 ```
 
-## Lokaler Betrieb
+## Development
 
-Entwicklungsserver starten:
+Start the local development server:
 
 ```powershell
 npm run dev
 ```
 
-Danach die angezeigte lokale URL im Browser öffnen, typischerweise:
+Then open the local URL shown in the terminal, usually:
 
 ```text
 http://127.0.0.1:5173/
 ```
 
-Der Entwicklungsserver muss im Terminal weiterlaufen, solange die App im Browser genutzt werden soll.
+Keep the terminal running while using the app in the browser.
 
 ## Build
 
-Produktionsbuild erstellen:
+Create a production build:
 
 ```powershell
 npm run build
 ```
 
-Der Build wird in `dist/` erzeugt.
+The production files are generated in `dist/`.
 
-Build lokal testen:
+Preview the production build locally:
 
 ```powershell
 npm run preview
 ```
 
-## Projektstruktur
+## Project Structure
 
 ```text
 src/
-  App.tsx                    Haupt-UI und Song-Auswahl
-  App.css                    Styling der App
+  App.tsx                    Main UI, language/theme settings, song selection
+  App.css                    App layout and component styling
   components/
-    ChordDiagram.tsx         SVGuitar-Wrapper für Akkorddiagramme
+    ChordDiagram.tsx         SVGuitar wrapper for chord diagrams
   data/
-    chords.ts                Akkorddaten für Ukulele und Gitarre
+    chords.ts                Chord data for ukulele and guitar
 ```
 
-## Technologien
+## Technology
 
 - React
 - TypeScript
 - Vite
 - SVGuitar
 
-## Hinweise
+## Notes
 
-Die Akkorddaten liegen aktuell statisch in `src/data/chords.ts`. Neue Akkorde können dort ergänzt werden, indem ein weiterer `ChordShape`-Eintrag hinzugefügt wird.
+Chord data is currently stored in `src/data/chords.ts`. New chords can be added by creating another `ChordShape` entry.
+
+The selected language is stored in a cookie. The selected theme is stored in `localStorage`.
